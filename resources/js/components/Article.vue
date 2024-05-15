@@ -64,6 +64,10 @@ export default {
         });
     },
      async deleteArticle  () {
+
+      if (!window.confirm('You sure?')) {
+                    return
+                }
          try {
              const response = await fetch(`/api/articles/${this.id}`, {
                  method: "DELETE",
