@@ -9,6 +9,8 @@ use Illuminate\Validation\ValidationException;
 
 class ArticleController extends Controller
 {
+
+    
     public function index()
     {
         return response()->json(Article::all(), 200);
@@ -32,7 +34,7 @@ class ArticleController extends Controller
 
     public function getArticlesByCategory($category)
     {
-        $articles = Article::where('category', $category)->get();
+        $articles = Article::where('category', $category)->paginate(4);
         return response()->json($articles);
     }
 
@@ -73,11 +75,14 @@ class ArticleController extends Controller
 
     public function show($id)
     {
-       
-        $article = Article::find($id);
-        return response()->json($article, 200);
 
-    
+        $article = Article::find($id);
+
+        if (!$article) {
+            return response()->json(['error' => 'Article not found'], 404);
+        }
+
+        return response()->json($article, 200);
 
     }
 

@@ -13,7 +13,7 @@ Route::get('/storage/{path}', function ($path) {
 
     // Return the file with appropriate MIME type
     return response()->file($filePath);
-})->where('path', '.*');
+    })->where('path', '.*');
 
   Route::get('/{any}', function () {
     return view('app');

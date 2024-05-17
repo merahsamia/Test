@@ -1,3 +1,5 @@
+
+
 <template>
   <section class="container mx-auto px-4 py-10 lg:py-16">
     <div v-for="(articles, category) in categories" :key="category" class="mb-12">
@@ -49,30 +51,28 @@
 
 
 <script>
-        import useArticleForm from '../composition-api/useArticleForm';
-        import {onMounted} from 'vue';
-        import { useRouter } from 'vue-router';
-
-
-        export default{
-
-            setup() {
-
-              const { categories, getArticlesByCategory } = useArticleForm();
-              const router = useRouter();
-              
-                onMounted(getArticlesByCategory);
-
-                const exploreCategory = (category) => {
-                router.push({ name: 'Category', params: { category: category.toLowerCase() } });
-                };
-
-                return { categories, getArticlesByCategory, exploreCategory };
-
-            }
-
-
-            
-        }
+export default {
+  data() {
+    return {
+      categories: {},
+    };
+  },
+  mounted() {
+    fetch('/api/articles-by-category')
+      .then(response => response.json())
+      .then(data => {
+        this.categories = data;
+      });
+    },
+    methods: {
+    exploreCategory(category) {
+      this.$router.push({ name: 'Category', params: { category: category.toLowerCase() } });
+    },
+  }
+};
 </script>
+
+<style scoped>
+
+</style>
 

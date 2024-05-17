@@ -26,7 +26,7 @@
                             Modifier
                         </router-link>
 
-          <button @click="deleteArticle" class="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600">Delete</button>
+          <button @click="deleteArticle(article.id)" class="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600">Delete</button>
         </div>
     </div>
 
@@ -39,55 +39,30 @@
   
 </template>
 
+
+
 <script>
+import useArticleForm from '../composition-api/useArticleForm';
+import { onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+
 export default {
-  data() {
-    return {
-      article:{},
-      id: ''
-    }
-  },
-  mounted() {
-    this.id = this.$route.params.articleId;
-    this.fetchArticle();
-  },
-  methods: {
-    fetchArticle() {
-      fetch(`/api/article/${this.id}`)
-        .then(response => response.json())
-        .then(data => {
-          this.article = data;
-          console.log(data);
-        })
-        .catch(error => {
-          console.error('Error fetching articles:', error);
-        });
-    },
-     async deleteArticle  () {
+  setup() {
+    const { article, fetchArticle, deleteArticle } = useArticleForm();
+    const route = useRoute();
+    const id = route.params.articleId;
 
-      if (!window.confirm('You sure?')) {
-                    return
-                }
-         try {
-             const response = await fetch(`/api/articles/${this.id}`, {
-                 method: "DELETE",
-             });
-
-             if (!response.ok) {
-                 throw new Error("Failed to delete article");
-             }
-           this.article = {};
-             console.log("Article deleted successfully");
-             // Optionally, you can navigate to a different route after deletion
-         } catch (error) {
-             console.error("Error deleting article:", error);
-             // Handle error if necessary
-         }
-     },
-    formatDate(date) {
+    onMounted(() => {
+      fetchArticle(id); // Passez l'ID à la fonction fetchArticle
+    });
+   
+    
+    const formatDate = (date) => {
       // Implement your date formatting logic here
       return new Date(date).toLocaleDateString();
-    }
+    };
+
+    return { article, formatDate, deleteArticle };
   }
 };
 </script>

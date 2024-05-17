@@ -56,7 +56,7 @@
   </template>
   
   <script>
-  import useArticleForm from '../composition-api/useArticleFormOld';
+  import useArticleForm from '../composition-api/useArticleForm';
   import { onMounted } from 'vue';
 
   

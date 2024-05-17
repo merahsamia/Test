@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import useArticleForm from '../composition-api/useArticleFormOld';
+import useArticleForm from '../composition-api/useArticleForm';
 
 export default {
   setup() {
